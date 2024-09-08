@@ -149,7 +149,6 @@ if (isset($_POST['add_user'])) {
                 <!--End Form-->
                 <div class="text-center">
                     <a class="d-block small mt-3" href="index.php">Login Page</a>
-                    <a class="d-block small" href="usr-forgot-password.php">Forgot Password?</a>
                 </div>
                 
             </div>
