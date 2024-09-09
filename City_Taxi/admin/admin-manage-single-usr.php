@@ -11,22 +11,16 @@ if (isset($_POST['update_user'])) {
     $u_fname = $_POST['u_fname'];
     $u_lname = $_POST['u_lname'];
     $u_phone = $_POST['u_phone'];
-    $u_license_or_ID = $_POST['u_license_or_ID'];
     $u_addr = $_POST['u_addr'];
     $u_email = $_POST['u_email'];
-    $u_pwd = $_POST['u_pwd'];
-    $u_category = $_POST['u_category'];
-
-    // Hash the password using MD5
-    $hashed_pwd = md5($u_pwd);
 
     // Prepare the SQL query for update
-    $query = "UPDATE tms_user SET u_fname=?, u_lname=?, u_phone=?, u_license_or_ID=?, u_addr=?, u_category=?, u_email=?, u_pwd=? WHERE u_id=?";
+    $query = "UPDATE tms_user SET u_fname=?, u_lname=?, u_phone=?, u_addr=?, u_email=? WHERE u_id=?";
     $stmt = $mysqli->prepare($query);
 
     if ($stmt) {
         // Bind the parameters to the SQL query
-        $stmt->bind_param('ssssssssi', $u_fname, $u_lname, $u_phone, $u_license_or_ID, $u_addr, $u_category, $u_email, $hashed_pwd, $u_id);
+        $stmt->bind_param('sssssi', $u_fname, $u_lname, $u_phone, $u_addr, $u_email, $u_id);
 
         
         if ($stmt->execute()) {
@@ -122,11 +116,6 @@ if (isset($_POST['update_user'])) {
                                     id="Contact" name="u_phone">
                             </div>
                             <div class="form-group">
-                                <label for="NIC No">NIC No</label>
-                                <input type="text" class="form-control" value="<?php echo $row->u_license_or_ID; ?>"
-                                    id="NIC No" name="u_license_or_ID">
-                            </div>
-                            <div class="form-group">
                                 <label for="Address">Address</label>
                                 <input type="text" class="form-control" value="<?php echo $row->u_addr; ?>"
                                     id="Address" name="u_addr">
@@ -142,11 +131,6 @@ if (isset($_POST['update_user'])) {
                                 <label for="Email address">Email address</label>
                                 <input type="email" value="<?php echo $row->u_email; ?>" class="form-control"
                                     name="u_email">
-                            </div>
-                            <div class="form-group">
-                                <label for="Password">Password</label>
-                                <input type="password" class="form-control" value="<?php echo $row->u_pwd; ?>"
-                                    name="u_pwd" id="Password">
                             </div>
 
                             <button type="submit" name="update_user" class="btn btn-success">Update User</button>
