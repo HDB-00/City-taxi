@@ -60,7 +60,7 @@ if (isset($_GET['del'])) {
                                     </tr>
                                 </thead>
                                 <?php
-                                $ret = "SELECT * FROM tms_user WHERE u_category = 'User' ORDER BY RAND() LIMIT 1000";
+                                $ret = "SELECT * FROM tms_user ORDER BY RAND() LIMIT 1000";
                                 $stmt = $mysqli->prepare($ret);
                                 $stmt->execute();
                                 $res = $stmt->get_result();
