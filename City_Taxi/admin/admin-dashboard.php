@@ -60,15 +60,13 @@
                                     <i class="fas fa-fw fa-users"></i>
                                 </div>
                                 <?php
-                  //code for summing up number of users 
-                  $result ="SELECT count(*) FROM tms_user where u_category = 'User'";
-                  $stmt = $mysqli->prepare($result);
-                  $stmt->execute();
-                  $stmt->bind_result($user);
-                  $stmt->fetch();
-                  $stmt->close();
-                ?>
-                               
+                                  $result ="SELECT count(*) FROM tms_user";
+                                  $stmt = $mysqli->prepare($result);
+                                  $stmt->execute();
+                                  $stmt->bind_result($user);
+                                  $stmt->fetch();
+                                  $stmt->close();
+                                ?>
                                 <div class="mr-5"><span class="badge badge-danger"><?php echo $user;?></span> Users</div>
                             </div>
                             <a class="card-footer text-white clearfix small z-1" href="admin-view-user.php">
@@ -86,15 +84,13 @@
                                     <i class="fas fa-fw fa fa-id-card"></i>
                                 </div>
                                 <?php
-                  //code for summing up number of drivers
-                  $result ="SELECT count(*) FROM tms_user where u_category = 'Driver'";
-                  $stmt = $mysqli->prepare($result);
-                  $stmt->execute();
-                  $stmt->bind_result($driver);
-                  $stmt->fetch();
-                  $stmt->close();
-                ?>
-                                
+                                  $result ="SELECT count(*) FROM tms_driver";
+                                  $stmt = $mysqli->prepare($result);
+                                  $stmt->execute();
+                                  $stmt->bind_result($driver);
+                                  $stmt->fetch();
+                                  $stmt->close();
+                                ?>
                                 <div class="mr-5"><span class="badge badge-danger"><?php echo $driver;?></span> Drivers</div>
                             </div>
                             <a class="card-footer text-white clearfix small z-1" href="admin-view-driver.php">
@@ -112,15 +108,13 @@
                                     <i class="fas fa-fw fa fa-bus"></i>
                                 </div>
                                 <?php
-                  //code for summing up number of vehicles
-                  $result ="SELECT count(*) FROM tms_vehicle";
-                  $stmt = $mysqli->prepare($result);
-                  $stmt->execute();
-                  $stmt->bind_result($vehicle);
-                  $stmt->fetch();
-                  $stmt->close();
-                ?>
-                                
+                                  $result ="SELECT count(*) FROM tms_vehicle";
+                                  $stmt = $mysqli->prepare($result);
+                                  $stmt->execute();
+                                  $stmt->bind_result($vehicle);
+                                  $stmt->fetch();
+                                  $stmt->close();
+                                ?>
                                 <div class="mr-5"><span class="badge badge-danger"><?php echo $vehicle;?></span> Vehicles</div>
                             </div>
                             <a class="card-footer text-white clearfix small z-1" href="admin-view-vehicle.php">
@@ -138,15 +132,13 @@
                                     <i class="fas fa-fw fa fa-address-book"></i>
                                 </div>
                                 <?php
-                  //code for summing up number of booking 
-                  $result ="SELECT count(*) FROM tms_user where u_car_book_status = 'Approved' || u_car_book_status = 'Pending' ";
-                  $stmt = $mysqli->prepare($result);
-                  $stmt->execute();
-                  $stmt->bind_result($book);
-                  $stmt->fetch();
-                  $stmt->close();
-                ?>
-                                
+                                  $result ="SELECT count(*) FROM tms_bookings WHERE b_status = 'Approved' OR b_status = 'Pending'";
+                                  $stmt = $mysqli->prepare($result);
+                                  $stmt->execute();
+                                  $stmt->bind_result($book);
+                                  $stmt->fetch();
+                                  $stmt->close();
+                                ?>
                                 <div class="mr-5"><span class="badge badge-danger"><?php echo $book;?></span> Bookings</div>
                             </div>
                             <a class="card-footer text-white clearfix small z-1" href="admin-view-booking.php">
@@ -171,39 +163,44 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Name</th>
-                                        <th>Phone</th>
-                                        <th>Vehicle Type</th>
-                                        <th>Reg No</th>
-                                        <th>Booking date</th>
+                                        <th>User Name</th>
+                                        <th>User Phone</th>
+                                        <th>Vehicle Reg No</th>
+                                        <th>Booking Date</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     <?php
-
-                  $ret="SELECT * FROM tms_user where u_car_book_status = 'Approved' || u_car_book_status = 'Pending' ";
-                  $stmt= $mysqli->prepare($ret) ;
-                  $stmt->execute() ;
-                  $res=$stmt->get_result();
-                  $cnt=1;
-                  while($row=$res->fetch_object())
-                {
-                ?>
-                                   
+                                    $ret="SELECT b.*, u.u_fname, u.u_lname, u.u_phone, v.v_reg_no 
+                                          FROM tms_bookings b 
+                                          JOIN tms_user u ON b.u_id = u.u_id 
+                                          JOIN tms_vehicle v ON b.v_id = v.v_id 
+                                          WHERE b.b_status = 'Approved' OR b.b_status = 'Pending'";
+                                    $stmt= $mysqli->prepare($ret);
+                                    $stmt->execute();
+                                    $res=$stmt->get_result();
+                                    $cnt=1;
+                                    while($row=$res->fetch_object())
+                                    {
+                                    ?>
                                     <tr>
                                         <td><?php echo $cnt;?></td>
                                         <td><?php echo $row->u_fname;?> <?php echo $row->u_lname;?></td>
                                         <td><?php echo $row->u_phone;?></td>
-                                        <td><?php echo $row->u_car_type;?></td>
-                                        <td><?php echo $row->u_car_regno;?></td>
-                                        <td><?php echo $row->u_car_bookdate;?></td>
-                                        <td><?php if($row->u_car_book_status == "Pending"){ echo '<span class = "badge badge-warning">'.$row->u_car_book_status.'</span>'; } else { echo '<span class = "badge badge-success">'.$row->u_car_book_status.'</span>';}?></td>
-
+                                        <td><?php echo $row->v_reg_no;?></td>
+                                        <td><?php echo $row->b_date;?></td>
+                                        <td>
+                                            <?php 
+                                            if($row->b_status == "Pending"){ 
+                                                echo '<span class="badge badge-warning">'.$row->b_status.'</span>'; 
+                                            } else { 
+                                                echo '<span class="badge badge-success">'.$row->b_status.'</span>';
+                                            }
+                                            ?>
+                                        </td>
                                     </tr>
                                     <?php  $cnt = $cnt +1; }?>
-
                                 </tbody>
                             </table>
                         </div>
