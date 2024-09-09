@@ -7,25 +7,24 @@ $aid = $_SESSION['a_id'];
 
 // Add Driver Code
 if (isset($_POST['add_driver'])) {
-    $u_fname = $_POST['u_fname'];
-    $u_lname = $_POST['u_lname'];
-    $u_phone = $_POST['u_phone'];
-    $u_license_or_ID = $_POST['u_license_or_ID'];
-    $u_addr = $_POST['u_addr'];
-    $u_email = $_POST['u_email'];
-    $u_pwd = $_POST['u_pwd'];
-    $u_category = $_POST['u_category'];
+    $d_fname = $_POST['d_fname'];
+    $d_lname = $_POST['d_lname'];
+    $d_phone = $_POST['d_phone'];
+    $d_license = $_POST['d_license'];
+    $d_addr = $_POST['d_addr'];
+    $d_email = $_POST['d_email'];
+    $d_pwd = $_POST['d_pwd'];
 
     // Hash the password using MD5
-    $hashed_pwd = md5($u_pwd);
+    $hashed_pwd = md5($d_pwd);
 
     // Prepare the SQL query
-    $query = "INSERT INTO tms_user (u_fname, u_lname, u_phone, u_license_or_ID, u_addr, u_category, u_email, u_pwd) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO tms_driver (d_fname, d_lname, d_phone, d_license, d_addr, d_email, d_pwd) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $mysqli->prepare($query);
 
     if ($stmt) {
         // Bind the parameters to the SQL query
-        $stmt->bind_param('ssssssss', $u_fname, $u_lname, $u_phone, $u_license_or_ID, $u_addr, $u_category, $u_email, $hashed_pwd);
+        $stmt->bind_param('ssissss', $d_fname, $d_lname, $d_phone, $d_license, $d_addr, $d_email, $hashed_pwd);
 
         
         if ($stmt->execute()) {
@@ -101,36 +100,32 @@ if (isset($_POST['add_driver'])) {
                         <!--Add User Form-->
                         <form method="POST">
                             <div class="form-group">
-                                <label for="u_fname">First Name</label>
-                                <input type="text" required class="form-control" id="u_fname" name="u_fname">
+                                <label for="d_fname">First Name</label>
+                                <input type="text" required class="form-control" id="d_fname" name="d_fname">
                             </div>
                             <div class="form-group">
-                                <label for="u_lname">Last Name</label>
-                                <input type="text" class="form-control" id="u_lname" name="u_lname">
+                                <label for="d_lname">Last Name</label>
+                                <input type="text" class="form-control" id="d_lname" name="d_lname">
                             </div>
                             <div class="form-group">
-                                <label for="u_phone">Contact</label>
-                                <input type="text" class="form-control" id="u_phone" name="u_phone">
+                                <label for="d_phone">Contact</label>
+                                <input type="number" class="form-control" id="d_phone" name="d_phone">
                             </div>
                             <div class="form-group">
-                                <label for="u_license_or_ID">Driving License No</label>
-                                <input type="text" class="form-control" id="u_license_or_ID" name="u_license_or_ID">
+                                <label for="d_license">Driving License No</label>
+                                <input type="text" class="form-control" id="d_license" name="d_license">
                             </div>
                             <div class="form-group">
-                                <label for="u_addr">Address</label>
-                                <input type="text" class="form-control" id="u_addr" name="u_addr">
-                            </div>
-                            <div class="form-group" style="display:none">
-                                <label for="u_category">Category</label>
-                                <input type="text" class="form-control" id="u_category" value="Driver" name="u_category">
+                                <label for="d_addr">Address</label>
+                                <input type="text" class="form-control" id="d_addr" name="d_addr">
                             </div>
                             <div class="form-group">
-                                <label for="u_email">Email Address</label>
-                                <input type="email" class="form-control" id="u_email" name="u_email">
+                                <label for="d_email">Email Address</label>
+                                <input type="email" class="form-control" id="d_email" name="d_email">
                             </div>
                             <div class="form-group">
-                                <label for="u_pwd">Password</label>
-                                <input type="password" class="form-control" id="u_pwd" name="u_pwd">
+                                <label for="d_pwd">Password</label>
+                                <input type="password" class="form-control" id="d_pwd" name="d_pwd">
                             </div>
 
                             <button type="submit" name="add_driver" class="btn btn-success">Add Driver</button>
