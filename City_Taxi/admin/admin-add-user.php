@@ -10,31 +10,27 @@ if (isset($_POST['add_user'])) {
     $u_fname = $_POST['u_fname'];
     $u_lname = $_POST['u_lname'];
     $u_phone = $_POST['u_phone'];
-    $u_license_or_ID = $_POST['u_license_or_ID'];
     $u_addr = $_POST['u_addr'];
     $u_email = $_POST['u_email'];
     $u_pwd = $_POST['u_pwd'];
-    $u_category = $_POST['u_category'];
 
     // Hash the password using MD5
     $hashed_pwd = md5($u_pwd);
 
     // Prepare the SQL query
-    $query = "INSERT INTO tms_user (u_fname, u_lname, u_phone, u_license_or_ID, u_addr, u_category, u_email, u_pwd) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO tms_user (u_fname, u_lname, u_phone, u_addr, u_email, u_pwd) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $mysqli->prepare($query);
 
     if ($stmt) {
         // Bind the parameters to the SQL query
-        $stmt->bind_param('ssssssss', $u_fname, $u_lname, $u_phone, $u_license_or_ID, $u_addr, $u_category, $u_email, $hashed_pwd);
+        $stmt->bind_param('ssssss', $u_fname, $u_lname, $u_phone, $u_addr, $u_email, $hashed_pwd);
 
-        
         if ($stmt->execute()) {
             $succ = "User Added";
         } else {
             $err = "Error: Could not execute the query. Please try again.";
         }
 
-        
         $stmt->close();
     } else {
         $err = "Error: Could not prepare the query. Please try again.";
@@ -108,17 +104,8 @@ if (isset($_POST['add_user'])) {
                                 <input type="text" class="form-control" id="u_phone" name="u_phone">
                             </div>
                             <div class="form-group">
-                                <label for="u_license_or_ID">NIC No</label>
-                                <input type="text" class="form-control" id="u_license_or_ID" name="u_license_or_ID">
-                            </div>
-                            <div class="form-group">
                                 <label for="u_addr">Address</label>
                                 <input type="text" class="form-control" id="u_addr" name="u_addr">
-                            </div>
-
-                            <div class="form-group" style="display:none">
-                                <label for="u_category">Category</label>
-                                <input type="text" class="form-control" id="u_category" value="User" name="u_category">
                             </div>
 
                             <div class="form-group">
