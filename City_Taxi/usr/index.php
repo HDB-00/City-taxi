@@ -6,7 +6,7 @@ if (isset($_POST['user_login'])) {
     $u_email = $_POST['u_email'];
     $u_pwd = $_POST['u_pwd'];
 
-    // Hash the password using MD5 to match it with the hashed password in the database
+    // Hash the password using MD5 
     $hashed_pwd = md5($u_pwd);
 
     // Prepare the SQL statement to retrieve the user details based on the email and hashed password

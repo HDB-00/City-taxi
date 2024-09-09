@@ -9,29 +9,29 @@ if(isset($_POST['user_login'])) {
     // Hash the entered password using MD5
     $hashed_pwd = md5($u_pwd);
 
-    // Prepare the SQL statement to retrieve the user details based on the email and hashed password
+  
     $stmt = $mysqli->prepare("SELECT u_email, u_pwd, u_id FROM tms_user WHERE u_email=? AND u_pwd=?");
-    $stmt->bind_param('ss', $u_email, $hashed_pwd); // Bind email and hashed password parameters
-    $stmt->execute(); // Execute the query
-    $stmt->store_result(); // Store the result
-    $stmt->bind_result($db_email, $db_pwd, $u_id); // Bind result variables
+    $stmt->bind_param('ss', $u_email, $hashed_pwd); 
+    $stmt->execute();
+    $stmt->store_result(); 
+    $stmt->bind_result($db_email, $db_pwd, $u_id);
 
     $rs = $stmt->fetch();
 
-    if($rs) { // If login is successful
-        $_SESSION['u_id'] = $u_id; // Assign session to user id
-        header("location:driver-dashboard.php"); // Redirect to driver dashboard
+    if($rs) { // 
+        $_SESSION['u_id'] = $u_id;
+        header("location:driver-dashboard.php"); 
         exit();
     } else {
         $error = "Username & Password do not match";
     }
 
-    $stmt->close(); // Close the statement
-    $mysqli->close(); // Close the database connection
+    $stmt->close(); 
+    $mysqli->close(); 
 }
 ?>
 
-<!--End Server Side Script Injection-->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,10 +44,9 @@ if(isset($_POST['user_login'])) {
 
     <title>City Taxi - Driver Login</title>
 
-    <!-- Custom fonts for this template-->
+
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
-    <!-- Custom styles for this template-->
     <link href="vendor/css/sb-admin.css" rel="stylesheet">
 </head>
 
@@ -57,10 +56,9 @@ if(isset($_POST['user_login'])) {
         <div class="card card-login mx-auto mt-5">
             <div class="card-header">Login For Driver</div>
             <div class="card-body">
-                <!-- INJECT SWEET ALERT -->
-                <!-- Trigger Sweet Alert -->
+
                 <?php if(isset($error)) { ?>
-                <!-- This code for injecting an alert -->
+          
                 <script>
                 setTimeout(function() {
                         swal("Failed!", "<?php echo $error;?>", "error");
@@ -94,13 +92,13 @@ if(isset($_POST['user_login'])) {
         </div>
     </div>
     
-    <!-- Bootstrap core JavaScript-->
+    <!-- Bootstrap -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
+
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <!-- Inject Sweet alert js-->
+  
     <script src="vendor/js/swal.js"></script>
 
 </body>
