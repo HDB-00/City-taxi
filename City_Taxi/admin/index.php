@@ -6,6 +6,9 @@ if (isset($_POST['admin_login'])) {
     $a_email = $_POST['a_email'];
     $a_pwd = $_POST['a_pwd']; 
 
+    // Hash the password using md5
+    $hashed_pwd = md5($a_pwd);
+
     // Prepare the SQL statement
     $stmt = $mysqli->prepare("SELECT a_id, a_pwd FROM tms_admin WHERE a_email = ?");
     $stmt->bind_param('s', $a_email); 
@@ -13,14 +16,15 @@ if (isset($_POST['admin_login'])) {
     $stmt->bind_result($a_id, $db_pwd); 
 
     if ($stmt->fetch()) { 
-        if ($a_pwd === $db_pwd) { 
+        // Compare the input password hashed with the stored hashed password
+        if ($hashed_pwd === $db_pwd) { 
             $_SESSION['a_id'] = $a_id; 
             header("location:admin-dashboard.php");
         } else {
-            $error = "Admin User Name & Password Not Match";
+            $error = "Admin Username & Password Not Match";
         }
     } else {
-        $error = "Admin User Name & Password Not Match";
+        $error = "Admin Username & Password Not Match";
     }
 
     $stmt->close(); 
@@ -42,9 +46,8 @@ if (isset($_POST['admin_login'])) {
     <?php if (isset($error)) { ?>
     <script>
     setTimeout(function() {
-            swal("Failed!", "<?php echo $error; ?>!", "error");
-        },
-        100);
+            swal("Failed!", "<?php echo $error; ?>", "error");
+        }, 100);
     </script>
     <?php } ?>
     <div class="container">
