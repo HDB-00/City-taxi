@@ -2,36 +2,48 @@
 session_start();
 include('vendor/inc/config.php'); // Include configuration file
 
-if(isset($_POST['user_login'])) {
-    $u_email = $_POST['u_email'];
-    $u_pwd = $_POST['u_pwd'];
+if (isset($_POST['driver_login'])) {
+    $d_email = $_POST['d_email'];
+    $d_pwd = $_POST['d_pwd'];
 
-    // Hash the entered password using MD5
-    $hashed_pwd = md5($u_pwd);
+    // Hash the entered password using MD5 to match the stored hash
+    $hashed_pwd = md5($d_pwd);
 
-  
-    $stmt = $mysqli->prepare("SELECT u_email, u_pwd, u_id FROM tms_user WHERE u_email=? AND u_pwd=?");
-    $stmt->bind_param('ss', $u_email, $hashed_pwd); 
-    $stmt->execute();
-    $stmt->store_result(); 
-    $stmt->bind_result($db_email, $db_pwd, $u_id);
+    // Prepare the SQL statement to retrieve the driver details
+    $stmt = $mysqli->prepare("SELECT d_id, d_fname, d_lname, d_phone, d_license, d_addr FROM tms_driver WHERE d_email = ? AND d_pwd = ?");
+    if ($stmt) {
+        $stmt->bind_param('ss', $d_email, $hashed_pwd);
+        $stmt->execute(); // Remove any arguments from execute()
+        $stmt->store_result();
+        $stmt->bind_result($d_id, $d_fname, $d_lname, $d_phone, $d_license, $d_addr);
 
-    $rs = $stmt->fetch();
+        if ($stmt->fetch()) {
+            // Login successful
+            $_SESSION['d_id'] = $d_id;
+            $_SESSION['d_fname'] = $d_fname;
+            $_SESSION['d_lname'] = $d_lname;
+            $_SESSION['d_phone'] = $d_phone;
+            $_SESSION['d_license'] = $d_license;
+            $_SESSION['d_addr'] = $d_addr;
+            $_SESSION['d_email'] = $d_email;
+            
+            // Redirect to driver dashboard
+            header("Location: driver-dashboard.php");
+            exit();
+        } else {
+            $error = "Invalid email or password";
+        }
 
-    if($rs) { // 
-        $_SESSION['u_id'] = $u_id;
-        header("location:driver-dashboard.php"); 
-        exit();
+        $stmt->close();
     } else {
-        $error = "Username & Password do not match";
+        $error = "Error: Could not prepare SQL statement.";
     }
-
-    $stmt->close(); 
-    $mysqli->close(); 
 }
+
+$mysqli->close();
 ?>
 
-
+<!--End Server Side Script Injection-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,11 +54,12 @@ if(isset($_POST['user_login'])) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>City Taxi - Driver Login</title>
+    <title>Driver Login</title>
 
-
+    <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
+    <!-- Custom styles for this template-->
     <link href="vendor/css/sb-admin.css" rel="stylesheet">
 </head>
 
@@ -56,12 +69,12 @@ if(isset($_POST['user_login'])) {
         <div class="card card-login mx-auto mt-5">
             <div class="card-header">Login For Driver</div>
             <div class="card-body">
-
-                <?php if(isset($error)) { ?>
-          
+                <!--Inject Sweet Alerts-->
+                <?php if (isset($error)) { ?>
+                <!--This code for injecting an alert-->
                 <script>
                 setTimeout(function() {
-                        swal("Failed!", "<?php echo $error;?>", "error");
+                        swal("Failed!", "<?php echo $error; ?>", "error");
                     },
                     100);
                 </script>
@@ -71,17 +84,17 @@ if(isset($_POST['user_login'])) {
                 <form method="POST">
                     <div class="form-group">
                         <div class="form-label-group">
-                            <input type="email" name="u_email" id="inputEmail" class="form-control" required="required" autofocus="autofocus">
+                            <input type="email" name="d_email" id="inputEmail" class="form-control" required="required" autofocus="autofocus">
                             <label for="inputEmail">Email address</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="form-label-group">
-                            <input type="password" name="u_pwd" id="inputPassword" class="form-control" required="required">
+                            <input type="password" name="d_pwd" id="inputPassword" class="form-control" required="required">
                             <label for="inputPassword">Password</label>
                         </div>
                     </div>
-                    <input type="submit" name="user_login" class="btn btn-success btn-block" value="Login">
+                    <input type="submit" name="driver_login" class="btn btn-primary btn-block" value="Login">
                 </form>
                 
                 <div class="text-center">
@@ -92,14 +105,13 @@ if(isset($_POST['user_login'])) {
         </div>
     </div>
     
-    <!-- Bootstrap -->
+    <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-
+    <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-  
+    <!--INject Sweet alert js-->
     <script src="vendor/js/swal.js"></script>
-
 </body>
 </html>

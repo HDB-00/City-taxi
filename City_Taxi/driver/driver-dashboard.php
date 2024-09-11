@@ -106,7 +106,7 @@ if(isset($_SESSION['success'])) {
                                 ?>
                                 <div class="mr-5"><span class="badge badge-danger"><?php echo $assigned_trips;?></span> Assigned Trips</div>
                             </div>
-                            <a class="card-footer text-white clearfix small z-1" href="operator-view-booking.php">
+                            <a class="card-footer text-white clearfix small z-1" href="driver-manage-booking.php">
                                 <span class="float-left">View Details</span>
                                 <span class="float-right">
                                     <i class="fas fa-angle-right"></i>
@@ -193,11 +193,11 @@ if(isset($_SESSION['success'])) {
     </a>
     
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModal" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="logoutModal">Ready to Leave?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>

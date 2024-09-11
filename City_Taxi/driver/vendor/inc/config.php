@@ -2,7 +2,7 @@
 $dbuser="root";
 $dbpass="";
 $host="localhost";
-$db="cityTaxy";
+$db="citytaxy";
 $mysqli=new mysqli($host,$dbuser, $dbpass, $db);
 ?>
  
