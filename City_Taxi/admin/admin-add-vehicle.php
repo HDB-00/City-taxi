@@ -136,7 +136,7 @@ if(isset($_POST['add_veh'])) {
                                 <label for="v_status">Vehicle Status</label>
                                 <select class="form-control" name="v_status" id="v_status">
                                     <option>Available</option>
-                                    <option>Booked</option>
+                                    <option>Busy</option>
                                 </select>
                             </div>
                             <div class="form-group">
