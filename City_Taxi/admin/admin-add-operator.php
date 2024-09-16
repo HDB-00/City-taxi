@@ -5,6 +5,45 @@ include('vendor/inc/checklogin.php');
 check_login();
 $aid = $_SESSION['a_id'];
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require '../vendor/autoload.php';
+
+function sendWelcomeEmail($userEmail, $userName, $userPassword) {
+    $mail = new PHPMailer(true);
+    try {
+        // Server settings
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'hndteamwattala@gmail.com';
+        $mail->Password   = 'brax ysds ffrx ojer'; // App Password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587;
+
+        // Recipients
+        $mail->setFrom('hndteamwattala@gmail.com', 'City Taxi');
+        $mail->addAddress($userEmail, $userName);
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Welcome to Our Service';
+        $mail->Body    = "Hello $userName,<br><br>
+                          Thank you for registering with our service. Your account has been successfully created.<br><br>
+                          Your login details:<br>
+                          Email: $userEmail<br>
+                          Password: $userPassword<br><br>";
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        error_log("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+        return false;
+    }
+}
+
+
 // Add Operator code
 if (isset($_POST['add_operator'])) {
     $o_fname = $_POST['o_fname'];
@@ -27,7 +66,11 @@ if (isset($_POST['add_operator'])) {
         $stmt->bind_param('sssssss', $o_fname, $o_lname, $o_phone, $o_nic, $o_addr, $o_email, $hashed_pwd);
 
         if ($stmt->execute()) {
-            $succ = "Operator Added Successfully";
+            if (sendWelcomeEmail($o_email, $o_fname . ' ' . $o_lname, $o_pwd)) {
+                $succ = "Operator Added and Welcome Email Sent";
+            } else {
+                $succ = "Operator Added but Failed to Send Welcome Email";
+            }
         } else {
             $err = "Error: Could not execute the query. Please try again. " . $stmt->error;
         }
