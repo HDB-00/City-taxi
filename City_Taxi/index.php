@@ -1,9 +1,12 @@
-
+<?php
+  session_start();
+  include('admin/vendor/inc/config.php');
+  
+?>
 <!DOCTYPE html>
 <html lang="en">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 <!--Head-->
 <?php include("vendor/inc/head.php");?>
 
@@ -18,15 +21,15 @@
 
             <div class="carousel-inner" role="listbox">
 
-                
+                <!-- Slide One - Set the background image for this slide in the line below -->
                 <div class="carousel-item active" style="background-image: url('vendor/img/Background.jpg')">
                 </div>
 
-                
+                <!-- Slide Three - Set the background image for this slide in the line below -->
                 <div class="carousel-item" style="background-image: url('vendor/img/Background20.jpg')">
                 </div>
 
-                
+                <!-- Slide Two - Set the background image for this slide in the line below -->
                 <div class="carousel-item" style="background-image: url('vendor/img/B02.jpg')">
                 </div>
 
@@ -49,7 +52,7 @@
 
     <section class="works">
         <div class="title">
-            <h3>HOW BOOK A VEHICLE?</h3>
+            <h3>HOW TO BOOK A VEHICLE?</h3>
             <p>"Where convenience meets reliability. Experience seamless vehicle bookings tailored to your needs with just a few clicks."</p>
         </div>
         <div class="container works-container">
@@ -204,14 +207,45 @@
     </section>
 
 
-    
+    <!--============== Testimonials section=============== -->
+
+    <br>
+    <div class="container">
+
+        
+        
+        <h2 class="my-4">CLIENT TESTIMONIALS</h2>
+
+        <div class="row">
+            <?php
+
+      $ret="SELECT * FROM tms_feedback where f_status ='Published' ORDER BY RAND() LIMIT 3 "; //get all feedbacks
+      $stmt= $mysqli->prepare($ret) ;
+      $stmt->execute() ;//ok
+      $res=$stmt->get_result();
+      $cnt=1;
+      while($row=$res->fetch_object())
+    {
+    ?>
+      
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <h4 class="card-header"><?php echo $row->f_uname;?></h4>
+                    <div class="card-body">
+                        <p class="card-text"><?php echo $row->f_content;?></p>
+                    </div>
+                </div>
+            </div>
+            <?php }?>
+        </div>
+
+    </div>
     <!-- /.container -->
 
     <!-- Footer -->
     <?php include("vendor/inc/footer.php");?>
     <!--.Footer-->
-
-    <!-- Bootstrap -->
+    <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     
