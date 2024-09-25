@@ -132,7 +132,7 @@
                                     <i class="fas fa-fw fa fa-address-book"></i>
                                 </div>
                                 <?php
-                                  $result ="SELECT count(*) FROM tms_bookings WHERE b_status = 'Approved' OR b_status = 'Pending'";
+                                  $result ="SELECT count(*) FROM tms_bookings";
                                   $stmt = $mysqli->prepare($result);
                                   $stmt->execute();
                                   $stmt->bind_result($book);
@@ -163,8 +163,8 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>User Name</th>
-                                        <th>User Phone</th>
+                                        <th>Client Name</th>
+                                        <th>Client Contact No</th>
                                         <th>Vehicle Reg No</th>
                                         <th>Booking Date</th>
                                         <th>Status</th>
@@ -175,8 +175,7 @@
                                     $ret="SELECT b.*, u.u_fname, u.u_lname, u.u_phone, v.v_reg_no 
                                           FROM tms_bookings b 
                                           JOIN tms_user u ON b.u_id = u.u_id 
-                                          JOIN tms_vehicle v ON b.v_id = v.v_id 
-                                          WHERE b.b_status = 'Approved' OR b.b_status = 'Pending'";
+                                          JOIN tms_vehicle v ON b.v_id = v.v_id";
                                     $stmt= $mysqli->prepare($ret);
                                     $stmt->execute();
                                     $res=$stmt->get_result();
